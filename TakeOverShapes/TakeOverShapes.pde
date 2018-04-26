@@ -3,23 +3,32 @@ color aqua = color(116, 200, 192);
 color pink = color(205, 67, 90);
 
 // SHAPES
-int numberOfCircles = 8;
-int numberOfRects = 10; 
-int numberOfShapes = numberOfCircles + numberOfRects;
-SpringyShape[] springs = new SpringyShape[numberOfShapes];
+int numberOfCircles = 10;
+int numberOfRects = 8; 
+int numberOfSquares = 5;
+SpringyShape[] springs = new SpringyShape[numberOfCircles + numberOfRects + numberOfSquares];
 
 // LIFECYCLE
 void setup() {
   size(640, 360);
   noStroke();
 
+  int currentNumberOfShapes = 0;
   for (int i=0; i<numberOfCircles; i++) {
     springs[i] = new CircleSpring(randomizer.aquaOrPink(), randomizer.randomXPos(), randomizer.randomYPos(), randomizer.circleSize(), springs, i);
   }
-
-  for (int i=numberOfCircles; i<numberOfCircles + numberOfRects; i++) {
+  currentNumberOfShapes += numberOfCircles;
+  
+  for (int i=currentNumberOfShapes; i<currentNumberOfShapes + numberOfRects; i++) {
     springs[i] = new RectSpring(randomizer.aquaOrPink(), randomizer.randomXPos(), randomizer.randomYPos(), randomizer.orientation(), springs, i);
   }
+  currentNumberOfShapes += numberOfRects;
+
+  for (int i=currentNumberOfShapes; i<currentNumberOfShapes + numberOfSquares; i++) {
+    springs[i] = new RectSpring(randomizer.aquaOrPink(), randomizer.randomXPos(), randomizer.randomYPos(), randomizer.orientation(), springs, i);
+  }
+  currentNumberOfShapes += numberOfSquares;
+
 }
 
 void draw() {

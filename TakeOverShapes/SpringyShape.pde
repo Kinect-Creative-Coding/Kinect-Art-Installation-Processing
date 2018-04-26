@@ -7,6 +7,7 @@ abstract class SpringyShape {
 
   // Screen values
   float tempxpos, tempypos, temptheta;
+  
   int sizeX;
   int sizeY;
 
@@ -109,7 +110,7 @@ abstract class SpringyShape {
 
   // Make sure no other springs are active
   boolean otherOver() {
-    for (int i=0; i<numberOfShapes; i++) {
+    for (int i=0; i<friends.length; i++) {
       if (i != me) {
         if (friends[i].over == true) {
           return true;
