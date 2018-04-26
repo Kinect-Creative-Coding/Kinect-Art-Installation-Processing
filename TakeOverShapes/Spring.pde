@@ -1,4 +1,3 @@
-
 public class Spring {
  
     private float rest_value;     // Value that the spring eventually go back to when there's no force applied
