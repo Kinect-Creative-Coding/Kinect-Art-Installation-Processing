@@ -20,13 +20,19 @@ void setup() {
   currentNumberOfShapes += numberOfCircles;
   
   for (int i=currentNumberOfShapes; i<currentNumberOfShapes + numberOfRects; i++) {
-    springs[i] = new RectSpring(randomizer.aquaOrPink(), randomizer.randomXPos(), randomizer.randomYPos(), randomizer.orientation(), springs, i);
+    springs[i] = new RectSpring(randomizer.aquaOrPink(),
+                                int(random(20, 150)), 15,
+                                randomizer.randomXPos(), randomizer.randomYPos(),
+                                randomizer.orientation(), springs, i);
   }
   currentNumberOfShapes += numberOfRects;
 
   for (int i=currentNumberOfShapes; i<currentNumberOfShapes + numberOfSquares; i++) {
-    springs[i] = new RectSpring(randomizer.aquaOrPink(), randomizer.randomXPos(), randomizer.randomYPos(), randomizer.orientation(), springs, i);
-  }
+    int size = int(random(15, 20));
+    springs[i] = new RectSpring(pink,
+                                size, size,
+                                randomizer.randomXPos(), randomizer.randomYPos(),
+                                randomizer.orientation(), springs, i);  }
   currentNumberOfShapes += numberOfSquares;
 
 }

@@ -1,8 +1,8 @@
 class RectSpring extends SpringyShape {
   color aColor;
 
-  RectSpring(color aColor, float x, float y, float theta, SpringyShape[] springs, int id) {
-    super(x, y, int(random(20, 150)), 15, 0.98, random(15, 25), 0.1, theta, springs, id);
+  RectSpring(color aColor, int rectLength, int rectWidth, float x, float y, float theta, SpringyShape[] springs, int id) {
+    super(x, y, rectLength, rectWidth, 0.98, random(15, 25), 0.1, theta, springs, id);
     this.aColor = aColor;
   }
 

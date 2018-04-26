@@ -8,7 +8,7 @@ public class Spring {
     private float mass;           // Mass
     
     // Spring Properties 
-    private float k;    // Spring constant
+    private float k;              // Spring constant
     private float damp;           // Damping
     
     // Spring Physics, which are all re-calculated every time we apply a new force

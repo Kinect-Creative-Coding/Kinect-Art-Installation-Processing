@@ -90,14 +90,14 @@ abstract class SpringyShape {
 
   // Test to see if mouse is over this shape
   boolean overEvent() {
-    return hitTest(mouseX, mouseY, tempxpos, tempypos);
+    return hitTest(mouseX, mouseY, tempxpos, tempypos, sizeX/2);
   }
 
   // Hit test within a circle
-  boolean hitTest(float hitX, float hitY, float currentX, float currentY) {
+  private boolean hitTest(float hitX, float hitY, float currentX, float currentY, float radius) {
     float disX = currentX - hitX;
     float disY = currentY - hitY;
-    return (sqrt(sq(disX) + sq(disY)) < sizeX/2 );
+    return (sqrt(sq(disX) + sq(disY)) < radius);
   }
 
   // Hit test within a rectangle
