@@ -10,8 +10,12 @@ class RectSpring extends SpringyShape {
     rect(x - shapeWidth/2, y - shapeHeight/2, shapeWidth, shapeHeight);
   }
 
-  void fillShape() {
-    fill(aColor);
+  void fillShape(boolean hasMouseOver) {
+    if (hasMouseOver) {
+      fill(153);
+    } else {
+      fill(aColor);
+    }
   }
 }
 
@@ -27,12 +31,23 @@ class CircleSpring extends SpringyShape {
     ellipse(x, y, shapeWidth, shapeHeight);
   }
 
-  void fillShape() {
-    fill(aColor);
+  void fillShape(boolean hasMouseOver) {
+    if (hasMouseOver) {
+      fill(153);
+    } else {
+      fill(aColor);
+    }
+  }
+
+  boolean shouldRotate() {
+    return false;
   }
 }
 
 abstract class SpringyShape {
+  // ----------------------------------------------------------------
+  // Variables
+  
   // Springs
   Spring x_spring, y_spring, theta_spring;
 
@@ -48,9 +63,10 @@ abstract class SpringyShape {
   int me;
 
   // Counters for when to randomize the next position or rotation
-  float next_pos_countDown = 0;         // When this is 0, randomize the next position
+  float next_pos_countDown = 0; // When this is 0, randomize next position
   float next_theta_countDown = 0;
 
+  // ----------------------------------------------------------------
   // Constructor
   SpringyShape(float x, float y, int sizeX, int sizeY, float d, float m, 
     float k_in, float rotation, SpringyShape[] others, int id) {
@@ -66,6 +82,17 @@ abstract class SpringyShape {
     me = id;
   }
 
+  // ----------------------------------------------------------------
+  // For Subclasses to override or implement
+  abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
+  abstract void fillShape(boolean hasMouseOver);
+
+  boolean shouldRotate() {
+    return true;
+  }
+ 
+  // ----------------------------------------------------------------
+  // Lifecycle
   void update() {
     // Set new position target
     if (move) {
@@ -75,7 +102,7 @@ abstract class SpringyShape {
 
       if (next_pos_countDown <= 0) {
         next_pos_countDown = random(30, 60);
-        
+
         float next_posx = x_spring.getRestValue() + random(-5, 5);
         float next_posy = y_spring.getRestValue()  + random(-5, 5);
 
@@ -89,9 +116,9 @@ abstract class SpringyShape {
     // Set new theta target
     if (next_theta_countDown <= 0) {
       next_theta_countDown = random(30, 60);
-      
+
       float next_rotation = theta_spring.getRestValue() + random(-0.1, 0.1);
-      
+
       theta_spring.setTargetValue(next_rotation);
     } else {
       next_theta_countDown -= 1;
@@ -139,21 +166,16 @@ abstract class SpringyShape {
   }
 
   void display() {
-    if (over) {
-      fill(153);
-    } else {
-      fillShape();
-    }
+    fillShape(over);
 
     pushMatrix();
     translate(tempxpos, tempypos);
-    rotate(temptheta);
+    if (shouldRotate()) {
+      rotate(temptheta);
+    }
     drawShape(0, 0, sizeX, sizeY);
     popMatrix();
   }
-
-  abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
-  abstract void fillShape();
 
   void pressed() {
     if (over) {
