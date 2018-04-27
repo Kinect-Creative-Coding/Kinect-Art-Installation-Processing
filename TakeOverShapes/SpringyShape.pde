@@ -1,6 +1,5 @@
 abstract class SpringyShape {
-  // ----------------------------------------------------------------
-  // Variables
+  // Variables -------------------------------------------------
   
   // Springs
   Spring x_spring, y_spring, theta_spring;
@@ -11,8 +10,8 @@ abstract class SpringyShape {
   int sizeX;
   int sizeY;
 
-  boolean over = false;
-  boolean move = false;
+  boolean shouldShowOverEvent = false;
+  boolean isMoving = false;
 
   SpringyShape[] friends;
   int me;
@@ -21,8 +20,7 @@ abstract class SpringyShape {
   float next_pos_countDown = 0; // When this is 0, randomize next position
   float next_theta_countDown = 0;
 
-  // ----------------------------------------------------------------
-  // Constructor
+  // Constructor -------------------------------------------------
   SpringyShape(float x, float y, int sizeX, int sizeY, float d, float m, 
     float k_in, float rotation, SpringyShape[] others, int id) {
 
@@ -37,8 +35,7 @@ abstract class SpringyShape {
     me = id;
   }
 
-  // ----------------------------------------------------------------
-  // For Subclasses to override or implement
+  // For Subclasses to override or implement ----------------------------
   abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
   abstract void fillShape(boolean hasMouseOver);
 
@@ -46,15 +43,14 @@ abstract class SpringyShape {
     return true;
   }
  
-  // ----------------------------------------------------------------
-  // Lifecycle
+  // Lifecycle ----------------------------------------------------------------
   void update() {
     // Set new position target
-    if (move) {
+    if (isMoving) {
       x_spring.setTargetValue(mouseX);
       y_spring.setTargetValue(mouseY);
+      
     } else {
-
       if (next_pos_countDown <= 0) {
         next_pos_countDown = random(30, 60);
 
@@ -84,12 +80,12 @@ abstract class SpringyShape {
     tempypos = y_spring.applyForceTowardsTarget();
     temptheta = theta_spring.applyForceTowardsTarget();
 
-    // Is there an mouseover event for this shape?
-    over = ((overEvent() || move) && !otherOver());
+    // Should we display the mouseover event on this shape?
+    shouldShowOverEvent = ((hasOverEvent() || isMoving) && !otherOver());
   }
 
-  // Test to see if mouse is over this shape
-  boolean overEvent() {
+  // Is mouse is hovering over this shape?
+  boolean hasOverEvent() {
     return hitTest(mouseX, mouseY, tempxpos, tempypos, sizeX/2);
   }
 
@@ -112,7 +108,7 @@ abstract class SpringyShape {
   boolean otherOver() {
     for (int i=0; i<friends.length; i++) {
       if (i != me) {
-        if (friends[i].over == true) {
+        if (friends[i].shouldShowOverEvent == true) {
           return true;
         }
       }
@@ -121,7 +117,7 @@ abstract class SpringyShape {
   }
 
   void display() {
-    fillShape(over);
+    fillShape(shouldShowOverEvent);
 
     pushMatrix();
     translate(tempxpos, tempypos);
@@ -133,15 +129,11 @@ abstract class SpringyShape {
   }
 
   void pressed() {
-    if (over) {
-      move = true;
-    } else {
-      move = false;
-    }
+    isMoving = shouldShowOverEvent;
   }
 
   void released() {
-    move = false;
+    isMoving = false;
     x_spring.resetTargetValue();
     y_spring.resetTargetValue();
   }
