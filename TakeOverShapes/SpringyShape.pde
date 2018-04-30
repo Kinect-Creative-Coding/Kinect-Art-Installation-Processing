@@ -1,12 +1,14 @@
 abstract class SpringyShape {
   // Variables -------------------------------------------------
+
+  color fillColor = color(200);
+  private color highlightColor = color(113, 242, 235);
   
   // Springs
   Spring x_spring, y_spring, theta_spring;
 
   // Screen values
   float tempxpos, tempypos, temptheta;
-  
   int sizeX;
   int sizeY;
 
@@ -35,9 +37,16 @@ abstract class SpringyShape {
     me = id;
   }
 
+  private void fillShape(boolean hasMouseOver) {
+    if (hasMouseOver) {
+      fill(highlightColor);
+    } else {
+      fill(fillColor);
+    }
+  }
+
   // For Subclasses to override or implement ----------------------------
   abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
-  abstract void fillShape(boolean hasMouseOver);
 
   boolean shouldRotate() {
     return true;

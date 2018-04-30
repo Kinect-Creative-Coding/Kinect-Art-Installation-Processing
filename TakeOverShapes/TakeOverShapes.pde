@@ -1,5 +1,6 @@
-// How to add new shapes
+// How to add new shapes:
 // Look for "SHAPE STEP" in this class. There are 3 steps.
+// Also add a shape to 'SpringyShapes_Custom'
 
 // GRID
 GridMaker gridMaker;
