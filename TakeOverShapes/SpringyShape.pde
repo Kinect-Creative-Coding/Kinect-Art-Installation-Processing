@@ -1,18 +1,19 @@
 abstract class SpringyShape {
-  // ----------------------------------------------------------------
-  // Variables
+  // Variables -------------------------------------------------
+
+  color fillColor = color(200);
+  private color highlightColor = color(113, 242, 235);
   
   // Springs
-  Spring x_spring, y_spring, theta_spring;
+  Spring xSpring, ySpring, thetaSpring;
 
   // Screen values
-  float tempxpos, tempypos, temptheta;
-  
+  float centerX, centerY, pivotTheta;
   int sizeX;
   int sizeY;
 
-  boolean over = false;
-  boolean move = false;
+  boolean shouldShowOverEvent = false;
+  boolean isMoving = false;
 
   SpringyShape[] friends;
   int me;
@@ -21,14 +22,13 @@ abstract class SpringyShape {
   float next_pos_countDown = 0; // When this is 0, randomize next position
   float next_theta_countDown = 0;
 
-  // ----------------------------------------------------------------
-  // Constructor
+  // Constructor -------------------------------------------------
   SpringyShape(float x, float y, int sizeX, int sizeY, float d, float m, 
     float k_in, float rotation, SpringyShape[] others, int id) {
 
-    x_spring = new Spring(x, m, k_in, d);  
-    y_spring = new Spring(y, m, k_in, d);
-    theta_spring = new Spring(rotation, m, 0.1, 0.99);
+    xSpring = new Spring(x, m, k_in, d);  
+    ySpring = new Spring(y, m, k_in, d);
+    thetaSpring = new Spring(rotation, m, 0.1, 0.99);
 
     this.sizeX = sizeX;
     this.sizeY = sizeY;
@@ -37,32 +37,37 @@ abstract class SpringyShape {
     me = id;
   }
 
-  // ----------------------------------------------------------------
-  // For Subclasses to override or implement
-  abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
-  abstract void fillShape(boolean hasMouseOver);
+  private void fillShape(boolean hasMouseOver) {
+    if (hasMouseOver) {
+      fill(highlightColor);
+    } else {
+      fill(fillColor);
+    }
+  }
+
+  // For Subclasses to override or implement ----------------------------
+  abstract void drawShape(float shapeWidth, float shapeHeight);
 
   boolean shouldRotate() {
     return true;
   }
  
-  // ----------------------------------------------------------------
-  // Lifecycle
+  // Lifecycle ----------------------------------------------------------------
   void update() {
     // Set new position target
-    if (move) {
-      x_spring.setTargetValue(mouseX);
-      y_spring.setTargetValue(mouseY);
+    if (isMoving) {
+      xSpring.setTargetValue(mouseX);
+      ySpring.setTargetValue(mouseY);
+      
     } else {
-
       if (next_pos_countDown <= 0) {
         next_pos_countDown = random(30, 60);
 
-        float next_posx = x_spring.getRestValue() + random(-5, 5);
-        float next_posy = y_spring.getRestValue()  + random(-5, 5);
+        float next_posx = xSpring.getRestValue() + random(-5, 5);
+        float next_posy = ySpring.getRestValue()  + random(-5, 5);
 
-        x_spring.setTargetValue(next_posx);
-        y_spring.setTargetValue(next_posy);
+        xSpring.setTargetValue(next_posx);
+        ySpring.setTargetValue(next_posy);
       } else {
         next_pos_countDown -= 1;
       }
@@ -72,25 +77,25 @@ abstract class SpringyShape {
     if (next_theta_countDown <= 0) {
       next_theta_countDown = random(30, 60);
 
-      float next_rotation = theta_spring.getRestValue() + random(-0.1, 0.1);
+      float next_rotation = thetaSpring.getRestValue() + random(-0.1, 0.1);
 
-      theta_spring.setTargetValue(next_rotation);
+      thetaSpring.setTargetValue(next_rotation);
     } else {
       next_theta_countDown -= 1;
     }
 
     // Update the new position and theta
-    tempxpos = x_spring.applyForceTowardsTarget();
-    tempypos = y_spring.applyForceTowardsTarget();
-    temptheta = theta_spring.applyForceTowardsTarget();
+    centerX = xSpring.applyForceTowardsTarget();
+    centerY = ySpring.applyForceTowardsTarget();
+    pivotTheta = thetaSpring.applyForceTowardsTarget();
 
-    // Is there an mouseover event for this shape?
-    over = ((overEvent() || move) && !otherOver());
+    // Should we display the mouseover event on this shape?
+    shouldShowOverEvent = ((hasOverEvent() || isMoving) && !otherOver());
   }
 
-  // Test to see if mouse is over this shape
-  boolean overEvent() {
-    return hitTest(mouseX, mouseY, tempxpos, tempypos, sizeX/2);
+  // Is mouse is hovering over this shape?
+  boolean hasOverEvent() {
+    return hitTest(mouseX, mouseY, centerX, centerY, sizeX/2);
   }
 
   // Hit test within a circle
@@ -112,7 +117,7 @@ abstract class SpringyShape {
   boolean otherOver() {
     for (int i=0; i<friends.length; i++) {
       if (i != me) {
-        if (friends[i].over == true) {
+        if (friends[i].shouldShowOverEvent == true) {
           return true;
         }
       }
@@ -121,28 +126,24 @@ abstract class SpringyShape {
   }
 
   void display() {
-    fillShape(over);
+    fillShape(shouldShowOverEvent);
 
     pushMatrix();
-    translate(tempxpos, tempypos);
+    translate(centerX, centerY);
     if (shouldRotate()) {
-      rotate(temptheta);
+      rotate(pivotTheta);
     }
-    drawShape(0, 0, sizeX, sizeY);
+    drawShape(sizeX, sizeY);
     popMatrix();
   }
 
   void pressed() {
-    if (over) {
-      move = true;
-    } else {
-      move = false;
-    }
+    isMoving = shouldShowOverEvent;
   }
 
   void released() {
-    move = false;
-    x_spring.resetTargetValue();
-    y_spring.resetTargetValue();
+    isMoving = false;
+    xSpring.resetTargetValue();
+    ySpring.resetTargetValue();
   }
 }
