@@ -46,7 +46,7 @@ abstract class SpringyShape {
   }
 
   // For Subclasses to override or implement ----------------------------
-  abstract void drawShape(float x, float y, float shapeWidth, float shapeHeight);
+  abstract void drawShape(float shapeWidth, float shapeHeight);
 
   boolean shouldRotate() {
     return true;
@@ -133,7 +133,7 @@ abstract class SpringyShape {
     if (shouldRotate()) {
       rotate(pivotTheta);
     }
-    drawShape(0, 0, sizeX, sizeY);
+    drawShape(sizeX, sizeY);
     popMatrix();
   }
 

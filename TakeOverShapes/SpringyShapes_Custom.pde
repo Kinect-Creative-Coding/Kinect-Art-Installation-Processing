@@ -4,8 +4,10 @@ class TriangleSpring extends SpringyShape {
     this.fillColor = fillColor;
   }
 
-  void drawShape(float x, float y, float shapeWidth, float shapeHeight) {
-    triangle(x, y, x + shapeWidth, y, x + shapeWidth / 2, y + shapeHeight);     
+  void drawShape(float shapeWidth, float shapeHeight) {
+    triangle(-shapeWidth/2, -shapeHeight/2, // Top left
+      shapeWidth/2, -shapeHeight/2, // Top right
+      0, shapeHeight/2); // Bottom center
   }
 }
 
@@ -15,8 +17,8 @@ class RectSpring extends SpringyShape {
     this.fillColor = fillColor;
   }
 
-  void drawShape(float x, float y, float shapeWidth, float shapeHeight) {
-    rect(x - shapeWidth/2, y - shapeHeight/2, shapeWidth, shapeHeight);
+  void drawShape(float shapeWidth, float shapeHeight) {
+    rect(-shapeWidth/2, -shapeHeight/2, shapeWidth, shapeHeight);
   }
 }
 
@@ -26,8 +28,8 @@ class CircleSpring extends SpringyShape {
     this.fillColor = fillColor;
   }
 
-  void drawShape(float x, float y, float shapeWidth, float shapeHeight) {
-    ellipse(x, y, shapeWidth, shapeHeight);
+  void drawShape(float shapeWidth, float shapeHeight) {
+    ellipse(0, 0, shapeWidth, shapeHeight);
   }
 
   boolean shouldRotate() {
