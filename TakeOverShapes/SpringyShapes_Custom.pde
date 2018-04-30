@@ -125,3 +125,15 @@ class LetterTSpring extends SpringyShape {
     endShape(CLOSE);
   }
 }
+
+class HalfCircleSpring extends SpringyShape {
+  HalfCircleSpring(color fillColor, int shapeLength, int shapeWidth, float x, float y, float theta, SpringyShape[] springs, int id) {
+    super(x, y, shapeLength, shapeWidth, 0.98, random(25, 35), 0.1, theta, springs, id);
+    this.fillColor = fillColor;
+  }
+
+  void drawShape(float w, float h) {
+    // arc(x, y, w, h, start, stop)
+    arc(0, 0, w, h, 0, PI, PIE);
+  }
+}

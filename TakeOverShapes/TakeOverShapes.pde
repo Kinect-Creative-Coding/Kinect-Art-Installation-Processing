@@ -5,7 +5,7 @@
 // GRID
 GridMaker gridMaker;
 int numRows = 5;
-int numColumns = 7;
+int numColumns = 6;
 
 // All the Springy Shapes
 SpringyShape[] springs = new SpringyShape[numRows * numColumns];
@@ -56,7 +56,8 @@ void mouseReleased() {
 enum SpringyShapeType {
 
   // CREATE SHAPE STEP 1
-  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE, SPRINGYTRIANGLE, SPRINGYLESSTHAN, SPRINGYLETTERE, SPRINGYLETTERT; 
+  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE, SPRINGYTRIANGLE,
+  SPRINGYLESSTHAN, SPRINGYLETTERE, SPRINGYLETTERT, SPRINGYHALFCIRCLE; 
 
   // CREATE SHAPE STEP 2
   SpringyShape shapeForType(int xPos, int yPos, int id, TakeOverShapes mainClass) {    
@@ -100,6 +101,11 @@ enum SpringyShapeType {
         50, 60, 
         xPos, yPos, 
         randomizer.orientation(), mainClass.springs, id);
+    case SPRINGYHALFCIRCLE:
+    return mainClass.new HalfCircleSpring(randomizer.pink, 
+        80, 74, 
+        xPos, yPos, 
+        randomizer.orientation(), mainClass.springs, id);
     default:
       println("TakeOverShapes ERROR: Did not specify shapeForType for " + this);
       return null;
@@ -126,14 +132,16 @@ enum SpringyShapeType {
     case SPRINGYSQUARE:
       return 1;
     case SPRINGYCIRCLE:
-      return 10;
+      return 7;
     case SPRINGYTRIANGLE:
-      return 3;
+      return 2;
     case SPRINGYLESSTHAN:
       return 2;
     case SPRINGYLETTERE:
       return 2;
     case SPRINGYLETTERT:
+      return 2;
+    case SPRINGYHALFCIRCLE:
       return 2;
     default:
       println("TakeOverShapes ERROR: Did not specify weight for " + this);
