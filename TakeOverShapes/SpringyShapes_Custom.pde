@@ -55,3 +55,44 @@ class LessThanSpring extends SpringyShape {
     endShape(CLOSE);
   }
 }
+
+// The "E" sign <
+class LetterESpring extends SpringyShape {
+  LetterESpring(color fillColor, int shapeLength, int shapeWidth, float x, float y, float theta, SpringyShape[] springs, int id) {
+    super(x, y, shapeLength, shapeWidth, 0.98, 35, 0.1, theta, springs, id);
+    this.fillColor = fillColor;
+  }
+
+  void drawShape(float w, float h) {
+    float gap = h / 10.0; // Vertical gap between arms in the E
+    float armHeight = (h - gap * 2.0) / 3.0; // Height of each of the 3 arms in the E
+    float spineWidth = w * 0.45; // Horizontal width of the spine of the E
+    
+    beginShape();
+    
+    // Top line of the E
+    vertex(-w/2, -h/2);
+    vertex(w/2, -h/2);
+    
+    // Underside of the top arm of the E
+    vertex(w/2, -h/2 + armHeight);
+    vertex(-w/2 + spineWidth, -h/2 + armHeight);
+
+    // Topside of the middle arm of the E
+    vertex(-w/2 + spineWidth, -armHeight/2);
+    vertex(w/2, -armHeight/2);
+    
+    // Bottomside of the middle arm of the E
+    vertex(w/2, armHeight/2);
+    vertex(-w/2 + spineWidth, armHeight/2);
+
+    // Top of the bottom arm of the E
+    vertex(-w/2 + spineWidth, h/2 - armHeight);
+    vertex(w/2, h/2 - armHeight);
+    
+    // Bottom line of the E
+    vertex(w/2, h/2);
+    vertex(-w/2, h/2);
+    endShape(CLOSE);
+  }
+}
