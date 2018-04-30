@@ -56,7 +56,7 @@ void mouseReleased() {
 enum SpringyShapeType {
 
   // CREATE SHAPE STEP 1
-  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE, SPRINGYTRIANGLE, SPRINGYLESSTHAN, SPRINGYLETTERE; 
+  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE, SPRINGYTRIANGLE, SPRINGYLESSTHAN, SPRINGYLETTERE, SPRINGYLETTERT; 
 
   // CREATE SHAPE STEP 2
   SpringyShape shapeForType(int xPos, int yPos, int id, TakeOverShapes mainClass) {    
@@ -95,6 +95,11 @@ enum SpringyShapeType {
         47, 60, 
         xPos, yPos, 
         randomizer.orientation(), mainClass.springs, id);
+    case SPRINGYLETTERT:
+      return mainClass.new LetterTSpring(randomizer.aqua, 
+        50, 60, 
+        xPos, yPos, 
+        randomizer.orientation(), mainClass.springs, id);
     default:
       println("TakeOverShapes ERROR: Did not specify shapeForType for " + this);
       return null;
@@ -127,6 +132,8 @@ enum SpringyShapeType {
     case SPRINGYLESSTHAN:
       return 2;
     case SPRINGYLETTERE:
+      return 2;
+    case SPRINGYLETTERT:
       return 2;
     default:
       println("TakeOverShapes ERROR: Did not specify weight for " + this);

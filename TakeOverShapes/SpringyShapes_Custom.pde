@@ -96,3 +96,32 @@ class LetterESpring extends SpringyShape {
     endShape(CLOSE);
   }
 }
+
+// The "T/" symbol
+class LetterTSpring extends SpringyShape {
+  LetterTSpring(color fillColor, int shapeLength, int shapeWidth, float x, float y, float theta, SpringyShape[] springs, int id) {
+    super(x, y, shapeLength, shapeWidth, 0.98, random(25, 35), 0.1, theta, springs, id);
+    this.fillColor = fillColor;
+  }
+
+  void drawShape(float w, float h) {
+    float spineWidth = w * 0.25;
+    float roofHeight = h / 4.0;
+    
+    beginShape();
+    
+    // Top line of the T
+    vertex(-w/2, -h/2);
+    vertex(w/2, -h/2);
+    
+    // Bottom line of the T
+    vertex(spineWidth/2, h/2);
+    vertex(-spineWidth/2, h/2);
+    
+    // Left line of the roof of the T
+    vertex(-spineWidth/2, -h/2 + roofHeight);
+    vertex(-w/2, -h/2 + roofHeight);
+
+    endShape(CLOSE);
+  }
+}
