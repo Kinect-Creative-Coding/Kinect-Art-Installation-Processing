@@ -13,7 +13,7 @@ class Randomizer {
     return COLORS[randomIndex];
   }
   
-  final int[] CIRCLE_SIZES = {60, 60, 25, 20, 18};
+  final int[] CIRCLE_SIZES = {60, 60, 60, 60, 25, 20, 18};
   color circleSize() {
     final int randomIndex = int(random(CIRCLE_SIZES.length));
     return CIRCLE_SIZES[randomIndex];

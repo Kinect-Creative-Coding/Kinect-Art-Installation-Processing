@@ -1,3 +1,25 @@
+class TriangleSpring extends SpringyShape {
+  color aColor;
+
+  TriangleSpring(color aColor, int triangleLength, int triangleWidth, float x, float y, float theta, SpringyShape[] springs, int id) {
+    super(x, y, triangleLength, triangleWidth, 0.98, random(15, 25), 0.1, theta, springs, id);
+    this.aColor = aColor;
+  }
+
+  void drawShape(float x, float y, float shapeWidth, float shapeHeight) {
+    triangle(x, y, x + shapeWidth, y, x + shapeWidth / 2, y + shapeHeight);     
+//    rect(x - shapeWidth/2, y - shapeHeight/2, shapeWidth, shapeHeight);
+  }
+
+  void fillShape(boolean hasMouseOver) {
+    if (hasMouseOver) {
+      fill(153);
+    } else {
+      fill(aColor);
+    }
+  }
+}
+
 class RectSpring extends SpringyShape {
   color aColor;
 

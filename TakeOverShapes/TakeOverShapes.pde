@@ -18,7 +18,7 @@ void setup() {
   noStroke();
 
   // (int maxWidth, int maxHeight, int numRows, int numColumns, int padding, int randomizeBy)
-  gridMaker = new GridMaker(width, height, numRows, numColumns, 60, 40);
+  gridMaker = new GridMaker(width, height, numRows, numColumns, 60, 20);
 
   SpringyShapeRandomizer shapeRandomizer = new SpringyShapeRandomizer();
 
@@ -53,9 +53,9 @@ void mouseReleased() {
 
 // Create new shapes and assign weight here
 enum SpringyShapeType {
-  
+
   // CREATE SHAPE STEP 1
-  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE; 
+  SPRINGYRECT, SPRINGYSQUARE, SPRINGYCIRCLE, SPRINGYTRIANGLE; 
 
   // CREATE SHAPE STEP 2
   SpringyShape shapeForType(int xPos, int yPos, int id, TakeOverShapes mainClass) {    
@@ -77,7 +77,15 @@ enum SpringyShapeType {
       return mainClass.new CircleSpring(randomizer.aquaOrPink(), 
         xPos, yPos, 
         randomizer.circleSize(), mainClass.springs, id);
+    case SPRINGYTRIANGLE:
+      //float triangleSize = mainClass.random(1, 2);
+      return mainClass.new TriangleSpring(randomizer.pink, 
+        30, 40, 
+        //int(triangleSize * 20.0), int(triangleSize * 30.0), 
+        xPos, yPos, 
+        randomizer.orientation(), mainClass.springs, id);
     default:
+      println("TakeOverShapes ERROR: Did not specify shapeForType for " + this);
       return null;
     }
   }
@@ -102,8 +110,11 @@ enum SpringyShapeType {
     case SPRINGYSQUARE:
       return 1;
     case SPRINGYCIRCLE:
-      return 8;
+      return 10;
+    case SPRINGYTRIANGLE:
+      return 3;
     default:
+      println("TakeOverShapes ERROR: Did not specify weight for " + this);
       return 0;
     }
   }
