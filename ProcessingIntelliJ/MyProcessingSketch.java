@@ -20,7 +20,6 @@ import processing.core.PApplet;
 //import static java.lang.Integer.max;
 
 
-
 public class MyProcessingSketch extends PApplet {
 
     public static void main(String[] args) {
@@ -67,7 +66,7 @@ public class MyProcessingSketch extends PApplet {
 
     public void settings() {
         // it's possible to customize this, for example 1920x1080
-        size(280, 200);
+        size(1280, 800);
 
 //        size(1280, 800, P3D);
     }
