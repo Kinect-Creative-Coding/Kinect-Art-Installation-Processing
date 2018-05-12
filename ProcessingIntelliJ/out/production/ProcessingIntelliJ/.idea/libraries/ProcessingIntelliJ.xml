@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="ProcessingIntelliJ">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/toxiclibs.jar!/" />
+      <root url="jar://$PROJECT_DIR$/core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/box2d_processing.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jbox2d-library-2.2.1-ds.jar!/" />
+      <root url="jar://$PROJECT_DIR$/blobDetection.jar!/" />
+      <root url="jar://$PROJECT_DIR$/SimpleOpenNI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
