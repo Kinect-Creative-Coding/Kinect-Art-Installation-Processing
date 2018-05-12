@@ -1,0 +1,7 @@
+[submodule "ProcessingIntelliJ/libfreenect2"]
+	path = ProcessingIntelliJ/libfreenect2
+	url = https://github.com/OpenKinect/libfreenect2.git
+[submodule "ProcessingIntelliJ/SimpleOpenni"]
+	path = ProcessingIntelliJ/SimpleOpenni
+	url = https://github.com/totovr/SimpleOpenni.git
+	branch = Processing_3.3.6

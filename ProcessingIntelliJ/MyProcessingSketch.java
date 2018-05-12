@@ -2,24 +2,22 @@ import com.sun.xml.internal.bind.v2.runtime.output.Pcdata;
 import processing.core.*;
 import SimpleOpenNI.*; // kinect
 import blobDetection.*; // blobs
-import toxi.geom.*; // toxiclibs shapes and vectors
+//import toxi.geom.*; // toxiclibs shapes and vectors
 import toxi.processing.*; // toxiclibs display
 import shiffman.box2d.*; // shiffman's jbox2d helper library
-import org.jbox2d.collision.shapes.*; // jbox2d
+//import org.jbox2d.collision.shapes.*; // jbox2d
 import org.jbox2d.dynamics.joints.*;
 import org.jbox2d.common.*; // jbox2d
 import org.jbox2d.dynamics.*; // jbox2d
 
-import java.awt.*;
+//import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
-
+//import java.util.Collections;
 
 import processing.core.PApplet;
-import processing.core.PVector;
+//import processing.core.PVector;
 
-import static java.lang.Integer.max;
-
+//import static java.lang.Integer.max;
 
 
 public class MyProcessingSketch extends PApplet {
@@ -51,14 +49,15 @@ public class MyProcessingSketch extends PApplet {
     float reScale;
 
     // background and blob color
-    PColor bgColor, blobColor;
+    int bgColor, blobColor;
     // three color palettes (artifact from me storingmany interesting color palettes as strings in an external data file ;-)
     String[] palettes = {
             "-1117720,-13683658,-8410437,-9998215,-1849945,-5517090,-4250587,-14178341,-5804972,-3498634",
             "-67879,-9633503,-8858441,-144382,-4996094,-16604779,-588031",
             "-1978728,-724510,-15131349,-13932461,-4741770,-9232823,-3195858,-8989771,-2850983,-10314372"
     };
-    PColor[] colorPalette;
+
+    int[] colorPalette;
 
     // the main PBox2D object in which all the physics-based stuff is happening
     Box2DProcessing box2d;
@@ -66,19 +65,15 @@ public class MyProcessingSketch extends PApplet {
     ArrayList<CustomShape> polygons = new ArrayList<CustomShape>();
 
     public void settings() {
-        size(200, 200);
+        // it's possible to customize this, for example 1920x1080
+        size(1280, 800);
 
+//        size(1280, 800, P3D);
     }
 
 
+    public void setup() {
 
-
-
-
-
-    void setup() {
-        // it's possible to customize this, for example 1920x1080
-        size(1280, 800, P3D);
         //fullScreen(P3D);
         // kinect = new Kinect2(this);
         // mirror the image to be more intuitive
@@ -97,10 +92,10 @@ public class MyProcessingSketch extends PApplet {
         // it's also possible to fill the complete height (leaves empty sides)
         reScale = (float) width / kinectWidth;
         // create a smaller blob image for speed and efficiency
-        blobs = createImage(kinectWidth/3, kinectHeight/3, RGB);
+        blobs = createImage(kinectWidth / 3, kinectHeight / 3, RGB);
         // initialize blob detection object to the blob image dimensions
         theBlobDetection = new BlobDetection(blobs.width, blobs.height);
-        theBlobDetection.setThreshold(0.2);
+        theBlobDetection.setThreshold(0.2f);
         // initialize ToxiclibsSupport object
         gfx = new ToxiclibsSupport(this);
         // setup box2d, create world, set gravity
@@ -112,25 +107,23 @@ public class MyProcessingSketch extends PApplet {
         setRandomColors(1);
 
         float gap = kinectWidth / 21;
-        for (int i=0; i<20; i++)
-        {
-            drawString(gap * (i+1), 2, 10);
+        for (int i = 0; i < 20; i++) {
+            drawString(gap * (i + 1), 2, 10);
         }
     }
 
     void drawString(float x, float size, int cards) {
 
-        float gap = kinectHeight/cards;
+        float gap = kinectHeight / cards;
         // anchor card
-        CustomShape s1 = new CustomShape(x, -40, size, BodyType.DYNAMIC);
+        CustomShape s1 = new CustomShape(this, x, -40, size, BodyType.DYNAMIC);
         polygons.add(s1);
 
         CustomShape last_shape = s1;
         CustomShape next_shape;
-        for (int i=0; i<cards; i++)
-        {
-            float y = -20 + gap * (i+1);
-            next_shape = new CustomShape(x, -20 + gap * (i+1), size, BodyType.DYNAMIC);
+        for (int i = 0; i < cards; i++) {
+            float y = -20 + gap * (i + 1);
+            next_shape = new CustomShape(this, x, -20 + gap * (i + 1), size, BodyType.DYNAMIC);
             DistanceJointDef jd = new DistanceJointDef();
 
             Vec2 c1 = last_shape.body.getWorldCenter();
@@ -146,7 +139,7 @@ public class MyProcessingSketch extends PApplet {
         }
     }
 
-    void draw() {
+    public void draw() {
         background(bgColor);
         // update the kinect object
         context.update();
@@ -155,11 +148,10 @@ public class MyProcessingSketch extends PApplet {
 
         int userCount = context.getNumberOfUsers();
 
-        color black = color(0,0,0);
+        int black = color(0, 0, 0);
         // filter out grey pixels (mixed in depth image)
-        for (int i=0; i<cam.pixels.length; i++)
-        {
-            color pix = cam.pixels[i];
+        for (int i = 0; i < cam.pixels.length; i++) {
+            int pix = cam.pixels[i];
             int blue = pix & 0xff;
             if (blue == ((pix >> 8) & 0xff) && blue == ((pix >> 16) & 0xff)) {
                 cam.pixels[i] = black;
@@ -176,7 +168,7 @@ public class MyProcessingSketch extends PApplet {
         // detect the blobs
         theBlobDetection.computeBlobs(blobs.pixels);
         // initialize a new polygon
-        poly = new PolygonBlob();
+        poly = new PolygonBlob(this);
         // create the polygon from the blobs (custom functionality, see class)
         poly.createPolygon();
         // create the box2d body from the polygon
@@ -184,7 +176,7 @@ public class MyProcessingSketch extends PApplet {
         // poly.createFoo();
         // update and draw everything (see method)
 
-        // CustomShape shape1 = new CustomShape(kinectWidth/2, 50, -1, BodyType.DYNAMIC);
+        // CustomShape shape1 = new CustomShape(this, kinectWidth/2, 50, -1, BodyType.DYNAMIC);
         updateAndDrawBox2D();
         // destroy the person's body (important!)
         poly.destroyBody();
@@ -196,8 +188,8 @@ public class MyProcessingSketch extends PApplet {
         // if frameRate is sufficient, add a polygon and a circle with a random radius
 
         if (frameRate > 30) {
-            CustomShape shape1 = new CustomShape(kinectWidth/2, -50, -1, BodyType.DYNAMIC);
-            // CustomShape shape2 = new CustomShape(kinectWidth/2, -50, random(2.5, 20), BodyType.DYNAMIC);
+            CustomShape shape1 = new CustomShape(this, kinectWidth / 2, -50, -1, BodyType.DYNAMIC);
+            // CustomShape shape2 = new CustomShape(this, kinectWidth/2, -50, random(2.5, 20), BodyType.DYNAMIC);
             polygons.add(shape1);
             // polygons.add(shape2);
         }
@@ -205,7 +197,7 @@ public class MyProcessingSketch extends PApplet {
         box2d.step();
 
         // center and reScale from Kinect to custom dimensions
-        translate(0, (height-kinectHeight*reScale)/2);
+        translate(0, (height - kinectHeight * reScale) / 2);
         scale(reScale);
 
         // display the person's polygon
@@ -221,11 +213,11 @@ public class MyProcessingSketch extends PApplet {
     void setRandomColors(int nthFrame) {
         if (frameCount % nthFrame == 0) {
             // turn a palette into a series of strings
-            String[] paletteStrings = split(palettes[int(random(palettes.length))], ",");
+            String[] paletteStrings = split(palettes[(int) random(palettes.length)], ",");
             // turn strings into colors
-            colorPalette = new color[paletteStrings.length];
-            for (int i=0; i<paletteStrings.length; i++) {
-                colorPalette[i] = int(paletteStrings[i]);
+            colorPalette = new int[paletteStrings.length];
+            for (int i = 0; i < paletteStrings.length; i++) {
+                colorPalette[i] = colorFromString(paletteStrings[i]);
             }
             // set background color to first color from palette
             bgColor = colorPalette[0];
@@ -256,11 +248,13 @@ public class MyProcessingSketch extends PApplet {
     }
 
 
-
     // returns a random color from the palette (excluding first aka background color)
-        PColor getRandomColor() {
-            return colorPalette[int(random(1, colorPalette.length))];
+    int getRandomColor() {
+        int randomIndex = (int) random(1, colorPalette.length);
+        return colorPalette[randomIndex];
+    }
 
-            ran
-        }
-
+    int colorFromString(String s) {
+        return color(Integer.parseInt(s));
+    }
+}
